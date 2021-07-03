@@ -47,5 +47,9 @@ export default withAuth(
     },
     lists,
     session,
+    server: {
+      cors: { origin: "*" }
+
+    },
   })
 );
