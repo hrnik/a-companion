@@ -1,0 +1,32 @@
+datasource postgresql {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "node_modules/.prisma/client"
+}
+
+model User {
+  id       String  @id @default(cuid())
+  name     String?
+  email    String? @unique
+  password String?
+}
+
+model Task {
+  id       String    @id @default(cuid())
+  title    String?   @unique
+  attempts Attempt[] @relation("Attempt_task")
+}
+
+model Attempt {
+  id     String    @id @default(cuid())
+  date   DateTime?
+  status String?
+  task   Task?     @relation("Attempt_task", fields: [taskId], references: [id])
+  taskId String?   @map("task")
+
+  @@index([taskId])
+}
